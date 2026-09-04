@@ -1,0 +1,17 @@
+{
+  "name": "wma-testgen",
+  "version": "1.0.0",
+  "description": "WMA-TestGen: AI-Powered COBOL Test Case Generation for Annuity Policy Admin Systems",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "pdf": "node generate-pdf.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "puppeteer-core": "^22.0.0"
+  },
+  "keywords": ["cobol", "testing", "annuities", "insurance", "ai", "automation"],
+  "author": "anuragbhumca07",
+  "license": "MIT"
+}

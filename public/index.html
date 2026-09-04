@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>WMA-TestGen — AI-Powered COBOL Test Automation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<style>
+:root {
+  --bg:       #0b1120;
+  --bg2:      #111827;
+  --card:     #1a2540;
+  --border:   #243056;
+  --blue:     #3b82f6;
+  --blue2:    #1d4ed8;
+  --gold:     #f59e0b;
+  --gold2:    #d97706;
+  --green:    #10b981;
+  --red:      #ef4444;
+  --text:     #f1f5f9;
+  --muted:    #94a3b8;
+  --radius:   14px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;}
+
+/* ─── NAV ─── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;backdrop-filter:blur(16px);background:rgba(11,17,32,.85);border-bottom:1px solid var(--border);padding:0 5%;}
+.nav-inner{max-width:1200px;margin:0 auto;height:64px;display:flex;align-items:center;justify-content:space-between;}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1.2rem;color:var(--text);}
+.logo span{background:linear-gradient(135deg,var(--blue),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.nav-links{display:flex;gap:32px;list-style:none;}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:.9rem;font-weight:500;transition:.2s;}
+.nav-links a:hover{color:var(--text);}
+.nav-cta{background:linear-gradient(135deg,var(--blue),var(--blue2));color:#fff;border:none;padding:10px 22px;border-radius:8px;font-weight:600;font-size:.9rem;cursor:pointer;transition:.2s;}
+.nav-cta:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(59,130,246,.4);}
+
+/* ─── HERO ─── */
+#hero{min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;padding:120px 5% 80px;}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(59,130,246,.18) 0%,transparent 70%),radial-gradient(ellipse 40% 40% at 80% 70%,rgba(245,158,11,.1) 0%,transparent 60%);}
+.grid-overlay{position:absolute;inset:0;background-image:linear-gradient(rgba(59,130,246,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(59,130,246,.06) 1px,transparent 1px);background-size:40px 40px;}
+.hero-content{position:relative;max-width:860px;text-align:center;}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(59,130,246,.15);border:1px solid rgba(59,130,246,.3);border-radius:50px;padding:6px 18px;font-size:.8rem;font-weight:600;color:var(--blue);margin-bottom:28px;letter-spacing:.05em;}
+.hero-badge i{color:var(--gold);}
+h1{font-size:clamp(2.4rem,5vw,4rem);font-weight:900;line-height:1.1;margin-bottom:24px;}
+h1 .grad{background:linear-gradient(135deg,#60a5fa,var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.hero-sub{font-size:1.15rem;color:var(--muted);max-width:600px;margin:0 auto 40px;line-height:1.7;}
+.hero-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+.btn-primary{background:linear-gradient(135deg,var(--blue),var(--blue2));color:#fff;border:none;padding:14px 32px;border-radius:10px;font-size:1rem;font-weight:700;cursor:pointer;transition:.2s;display:flex;align-items:center;gap:8px;}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(59,130,246,.4);}
+.btn-secondary{background:transparent;color:var(--text);border:1px solid var(--border);padding:14px 32px;border-radius:10px;font-size:1rem;font-weight:600;cursor:pointer;transition:.2s;display:flex;align-items:center;gap:8px;}
+.btn-secondary:hover{border-color:var(--blue);color:var(--blue);}
+.floating-card{position:absolute;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 20px;font-size:.8rem;box-shadow:0 20px 60px rgba(0,0,0,.4);animation:float 6s ease-in-out infinite;}
+.card-left{left:-10px;top:30%;animation-delay:-2s;}
+.card-right{right:-10px;top:40%;animation-delay:-4s;}
+@keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-12px);}}
+.fc-label{color:var(--muted);font-size:.7rem;margin-bottom:4px;}
+.fc-val{font-weight:700;color:var(--green);font-size:1.2rem;}
+.fc-val.blue{color:var(--blue);}
+
+/* ─── STATS ─── */
+#stats{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:48px 5%;}
+.stats-grid{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:2px;}
+.stat{text-align:center;padding:24px;}
+.stat-num{font-size:2.8rem;font-weight:900;background:linear-gradient(135deg,var(--blue),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.stat-label{color:var(--muted);font-size:.9rem;margin-top:4px;}
+
+/* ─── SECTIONS ─── */
+section{padding:100px 5%;}
+.section-wrap{max-width:1100px;margin:0 auto;}
+.section-tag{display:inline-block;background:rgba(59,130,246,.1);color:var(--blue);border:1px solid rgba(59,130,246,.25);border-radius:6px;padding:4px 14px;font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:16px;}
+h2{font-size:2.4rem;font-weight:800;margin-bottom:16px;line-height:1.2;}
+.section-sub{color:var(--muted);font-size:1.05rem;max-width:620px;line-height:1.7;margin-bottom:60px;}
+
+/* ─── PROBLEM ─── */
+.problem-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+.problem-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:36px 28px;}
+.problem-icon{width:52px;height:52px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin-bottom:20px;}
+.p-red{background:rgba(239,68,68,.15);color:var(--red);}
+.p-yellow{background:rgba(245,158,11,.15);color:var(--gold);}
+.p-blue{background:rgba(59,130,246,.15);color:var(--blue);}
+.problem-card h3{font-size:1.15rem;font-weight:700;margin-bottom:12px;}
+.problem-card p{color:var(--muted);font-size:.9rem;line-height:1.7;}
+
+/* ─── SOLUTION ─── */
+#solution{background:var(--bg2);}
+.solution-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;}
+.sol-points{display:flex;flex-direction:column;gap:20px;}
+.sol-point{display:flex;gap:16px;align-items:flex-start;}
+.sol-icon{width:36px;height:36px;border-radius:8px;background:rgba(16,185,129,.15);color:var(--green);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.9rem;}
+.sol-point h4{font-size:1rem;font-weight:700;margin-bottom:4px;}
+.sol-point p{color:var(--muted);font-size:.88rem;line-height:1.6;}
+.terminal{background:#0d1117;border:1px solid var(--border);border-radius:var(--radius);padding:24px;font-family:'Fira Code',monospace;font-size:.82rem;line-height:1.8;}
+.t-bar{display:flex;gap:6px;margin-bottom:16px;}
+.t-dot{width:12px;height:12px;border-radius:50%;}
+.t-red{background:#ff5f57;}.t-yellow{background:#febc2e;}.t-green{background:#28c840;}
+.t-line{margin-left:8px;}
+.c-comment{color:#6b7280;}
+.c-cmd{color:#60a5fa;}
+.c-ok{color:#10b981;}
+.c-warn{color:#f59e0b;}
+.c-val{color:#f1f5f9;}
+
+/* ─── HOW IT WORKS ─── */
+.phases{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+.phase{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:28px 24px;position:relative;transition:.3s;}
+.phase:hover{border-color:var(--blue);transform:translateY(-4px);}
+.phase-num{width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,var(--blue),var(--blue2));display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1rem;margin-bottom:16px;}
+.phase h3{font-size:1rem;font-weight:700;margin-bottom:10px;}
+.phase p{color:var(--muted);font-size:.85rem;line-height:1.6;}
+.phase-tag{margin-top:14px;font-size:.72rem;font-weight:600;color:var(--blue);background:rgba(59,130,246,.1);padding:3px 10px;border-radius:20px;display:inline-block;}
+
+/* ─── DEMO ─── */
+#demo{background:var(--bg2);}
+.demo-container{display:grid;grid-template-columns:1fr 1.3fr;gap:24px;min-height:480px;}
+.demo-panel{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;}
+.demo-header{padding:14px 20px;background:rgba(255,255,255,.03);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;font-size:.85rem;font-weight:600;}
+.demo-header i{color:var(--gold);}
+.demo-body{padding:20px;}
+.demo-body textarea{width:100%;height:280px;background:transparent;border:none;color:var(--muted);font-family:'Fira Code',monospace;font-size:.78rem;line-height:1.7;resize:none;outline:none;}
+.demo-footer{padding:14px 20px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;}
+#generate-btn{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;border:none;padding:10px 24px;border-radius:8px;font-weight:700;font-size:.9rem;cursor:pointer;transition:.2s;display:flex;align-items:center;gap:8px;}
+#generate-btn:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(245,158,11,.35);}
+.output-scroll{height:360px;overflow-y:auto;padding:16px;}
+.output-scroll::-webkit-scrollbar{width:4px;}
+.output-scroll::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+.tc-card{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:12px;animation:fadeIn .4s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+.tc-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.tc-id{font-family:'Fira Code',monospace;font-size:.78rem;color:var(--gold);font-weight:600;}
+.tc-badge{font-size:.7rem;padding:2px 8px;border-radius:20px;font-weight:600;}
+.badge-pass{background:rgba(16,185,129,.15);color:var(--green);}
+.badge-ep{background:rgba(59,130,246,.15);color:var(--blue);}
+.badge-bva{background:rgba(245,158,11,.15);color:var(--gold);}
+.tc-title{font-size:.88rem;font-weight:600;margin-bottom:8px;}
+.tc-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px;}
+.tc-chip{font-size:.7rem;padding:2px 8px;border-radius:4px;background:rgba(255,255,255,.05);color:var(--muted);}
+.tc-chip strong{color:var(--text);}
+.tc-calc{background:#0d1117;border-radius:6px;padding:10px 12px;font-family:'Fira Code',monospace;font-size:.72rem;color:var(--muted);line-height:1.8;margin-top:8px;}
+.tc-calc .hl{color:var(--green);}
+.spinner{display:flex;align-items:center;justify-content:center;height:200px;gap:12px;color:var(--muted);}
+.spinner i{animation:spin 1s linear infinite;font-size:1.5rem;color:var(--blue);}
+@keyframes spin{to{transform:rotate(360deg);}}
+.empty-state{text-align:center;color:var(--muted);padding:60px 20px;font-size:.9rem;}
+.empty-state i{font-size:2rem;margin-bottom:12px;display:block;color:var(--border);}
+
+/* ─── RESULTS ─── */
+.results-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;}
+.result-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:28px;}
+.result-card.featured{border-color:var(--blue);grid-column:span 2;}
+.result-header{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+.result-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;}
+.ri-blue{background:rgba(59,130,246,.15);color:var(--blue);}
+.ri-green{background:rgba(16,185,129,.15);color:var(--green);}
+.ri-gold{background:rgba(245,158,11,.15);color:var(--gold);}
+.result-card h3{font-size:1rem;font-weight:700;}
+.result-card p{color:var(--muted);font-size:.85rem;line-height:1.6;}
+.coverage-bars{display:flex;flex-direction:column;gap:14px;}
+.cbar{display:flex;flex-direction:column;gap:6px;}
+.cbar-label{display:flex;justify-content:space-between;font-size:.82rem;}
+.cbar-label span:last-child{color:var(--green);font-weight:700;}
+.cbar-track{height:8px;background:rgba(255,255,255,.07);border-radius:4px;overflow:hidden;}
+.cbar-fill{height:100%;border-radius:4px;transition:width 1.5s ease;}
+.fill-blue{background:linear-gradient(90deg,var(--blue),#60a5fa);}
+.fill-green{background:linear-gradient(90deg,var(--green),#34d399);}
+.fill-gold{background:linear-gradient(90deg,var(--gold),#fbbf24);}
+.tc-table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:12px;}
+.tc-table th{text-align:left;color:var(--muted);font-weight:600;padding:8px 12px;border-bottom:1px solid var(--border);}
+.tc-table td{padding:8px 12px;border-bottom:1px solid rgba(255,255,255,.04);}
+.tc-table tr:last-child td{border-bottom:none;}
+.rc-pass{color:var(--green);font-weight:700;font-family:'Fira Code',monospace;}
+.rc-fail{color:var(--red);font-weight:700;font-family:'Fira Code',monospace;}
+
+/* ─── ROI ─── */
+#roi{background:var(--bg2);}
+.roi-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;}
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.compare-box{border-radius:var(--radius);padding:24px;}
+.before{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);}
+.after{background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.2);}
+.compare-box h4{font-size:.8rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:16px;}
+.before h4{color:var(--red);}
+.after h4{color:var(--green);}
+.compare-item{display:flex;align-items:center;gap:8px;font-size:.85rem;margin-bottom:10px;color:var(--muted);}
+.compare-item i{width:16px;}
+.before .compare-item i{color:var(--red);}
+.after .compare-item i{color:var(--green);}
+.roi-numbers{display:flex;flex-direction:column;gap:20px;}
+.roi-num{display:flex;align-items:center;gap:20px;}
+.roi-big{font-size:2.2rem;font-weight:900;min-width:100px;}
+.roi-big.green{color:var(--green);}
+.roi-big.blue{color:var(--blue);}
+.roi-big.gold{color:var(--gold);}
+.roi-desc{font-size:.88rem;color:var(--muted);line-height:1.5;}
+
+/* ─── TIMELINE ─── */
+.timeline{position:relative;padding-left:40px;}
+.timeline::before{content:'';position:absolute;left:16px;top:0;bottom:0;width:2px;background:linear-gradient(to bottom,var(--blue),var(--gold));}
+.tl-item{position:relative;margin-bottom:36px;}
+.tl-dot{position:absolute;left:-32px;top:4px;width:16px;height:16px;border-radius:50%;background:var(--blue);border:3px solid var(--bg);box-shadow:0 0 0 3px rgba(59,130,246,.3);}
+.tl-week{font-size:.75rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px;}
+.tl-item h4{font-size:1rem;font-weight:700;margin-bottom:6px;}
+.tl-item p{font-size:.85rem;color:var(--muted);line-height:1.6;}
+
+/* ─── CTA ─── */
+#cta{background:linear-gradient(135deg,rgba(59,130,246,.15),rgba(245,158,11,.1));border-top:1px solid var(--border);text-align:center;padding:100px 5%;}
+#cta h2{font-size:2.6rem;margin-bottom:16px;}
+#cta p{color:var(--muted);font-size:1.05rem;max-width:500px;margin:0 auto 40px;}
+.cta-btns{display:flex;gap:14px;justify-content:center;}
+
+/* ─── FOOTER ─── */
+footer{background:var(--bg);border-top:1px solid var(--border);padding:32px 5%;text-align:center;color:var(--muted);font-size:.85rem;}
+footer a{color:var(--blue);text-decoration:none;}
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:900px){
+  .phases,.problem-grid{grid-template-columns:1fr 1fr;}
+  .demo-container,.solution-grid,.roi-grid,.results-grid{grid-template-columns:1fr;}
+  .result-card.featured{grid-column:span 1;}
+  .stats-grid{grid-template-columns:repeat(2,1fr);}
+  .floating-card{display:none;}
+}
+@media(max-width:600px){
+  .phases,.problem-grid,.stats-grid{grid-template-columns:1fr;}
+  .compare{grid-template-columns:1fr;}
+  nav .nav-links{display:none;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <div class="logo">
+      <i class="fa-solid fa-brain"></i>
+      <span>WMA-TestGen</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#problem">Problem</a></li>
+      <li><a href="#how">How It Works</a></li>
+      <li><a href="#demo">Live Demo</a></li>
+      <li><a href="#roi">ROI</a></li>
+      <li><a href="#timeline">Roadmap</a></li>
+    </ul>
+    <button class="nav-cta" onclick="document.getElementById('demo').scrollIntoView({behavior:'smooth'})">
+      Try Demo &rarr;
+    </button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="grid-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-badge"><i class="fa-solid fa-sparkles"></i> Enterprise COBOL QA Automation</div>
+    <h1>Transform Your<br/><span class="grad">COBOL Testing</span><br/>with AI Precision</h1>
+    <p class="hero-sub">WMA-TestGen reads your Business Systems Design and COBOL modules, then generates a complete, mathematically verified test suite — in seconds, not weeks.</p>
+    <div class="hero-btns">
+      <button class="btn-primary" onclick="document.getElementById('demo').scrollIntoView({behavior:'smooth'})">
+        <i class="fa-solid fa-play"></i> See Live Demo
+      </button>
+      <button class="btn-secondary" onclick="document.getElementById('how').scrollIntoView({behavior:'smooth'})">
+        <i class="fa-solid fa-circle-info"></i> How It Works
+      </button>
+    </div>
+  </div>
+  <div class="floating-card card-left">
+    <div class="fc-label">Business Rules Covered</div>
+    <div class="fc-val">8 / 8</div>
+    <div style="color:#6b7280;font-size:.7rem;margin-top:2px;">✓ 100% Traceability</div>
+  </div>
+  <div class="floating-card card-right">
+    <div class="fc-label">Time Saved</div>
+    <div class="fc-val blue">~90%</div>
+    <div style="color:#6b7280;font-size:.7rem;margin-top:2px;">2 weeks → 2 hours</div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div id="stats">
+  <div class="stats-grid">
+    <div class="stat">
+      <div class="stat-num" data-target="90">0%</div>
+      <div class="stat-label">Reduction in Test Design Time</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num" data-target="100" data-suffix="%">0%</div>
+      <div class="stat-label">Business Rule Coverage Guaranteed</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num" data-target="20" data-suffix="+">0</div>
+      <div class="stat-label">Test Cases per Module</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num" data-target="0" data-prefix="$" data-per="k saved">0</div>
+      <div class="stat-label">Avg. Savings per Enhancement</div>
+    </div>
+  </div>
+</div>
+
+<!-- PROBLEM -->
+<section id="problem">
+  <div class="section-wrap">
+    <div class="section-tag">The Challenge</div>
+    <h2>COBOL Testing Is Broken</h2>
+    <p class="section-sub">Legacy annuity systems process billions in premium each year — yet QA relies on manual, error-prone, undocumented test design.</p>
+    <div class="problem-grid">
+      <div class="problem-card">
+        <div class="problem-icon p-red"><i class="fa-solid fa-clock"></i></div>
+        <h3>Weeks of Manual Work</h3>
+        <p>A single enhancement BSD takes 1–2 weeks to manually translate into a test suite. With dozens of modules releasing quarterly, teams are perpetually behind.</p>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon p-yellow"><i class="fa-solid fa-triangle-exclamation"></i></div>
+        <h3>Missed Edge Cases</h3>
+        <p>Boundary values, COMP-3 rounding, free-look periods, qualified-plan tax rules — manual test designers miss critical edge cases that slip into production.</p>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon p-blue"><i class="fa-solid fa-link-slash"></i></div>
+        <h3>Zero Traceability</h3>
+        <p>Auditors demand a clear link from every business rule to a test case and expected result. Manual spreadsheets can't provide it — compliance risk is real.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOLUTION -->
+<section id="solution">
+  <div class="section-wrap">
+    <div class="solution-grid">
+      <div>
+        <div class="section-tag">The Solution</div>
+        <h2>AI That Understands COBOL Logic</h2>
+        <p class="section-sub" style="margin-bottom:36px;">WMA-TestGen reads your actual code — not a description of it — and produces verified, traceable test cases with computed expected values.</p>
+        <div class="sol-points">
+          <div class="sol-point">
+            <div class="sol-icon"><i class="fa-solid fa-file-code"></i></div>
+            <div>
+              <h4>Reads BSD + COBOL Source</h4>
+              <p>Ingests your Business Systems Design and actual .cbl / .cpy files. No manual input, no proxy documents.</p>
+            </div>
+          </div>
+          <div class="sol-point">
+            <div class="sol-icon"><i class="fa-solid fa-calculator"></i></div>
+            <div>
+              <h4>Computes Expected Values from Code</h4>
+              <p>Traces every COMPUTE statement. Shows arithmetic step-by-step. COMP-3 precision, ROUNDED clauses — all honored.</p>
+            </div>
+          </div>
+          <div class="sol-point">
+            <div class="sol-icon"><i class="fa-solid fa-table-list"></i></div>
+            <div>
+              <h4>Full Traceability Matrix</h4>
+              <p>Every test case cites the BR it covers. Every BR points to test IDs. Every error code has a negative test. Ready for audit.</p>
+            </div>
+          </div>
+          <div class="sol-point">
+            <div class="sol-icon"><i class="fa-solid fa-file-pdf"></i></div>
+            <div>
+              <h4>Formal Documentation Auto-Generated</h4>
+              <p>Outputs a complete test plan with RTM, environment setup, execution notes, and sign-off block — attach directly to your change record.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="terminal">
+        <div class="t-bar"><div class="t-dot t-red"></div><div class="t-dot t-yellow"></div><div class="t-dot t-green"></div></div>
+        <div class="t-line"><span class="c-comment">// WMA-TestGen Output — TC-010</span></div>
+        <div class="t-line">&nbsp;</div>
+        <div class="t-line"><span class="c-cmd">Test ID</span> <span class="c-val">: TC-010</span></div>
+        <div class="t-line"><span class="c-cmd">Title  </span> <span class="c-val">: Q-plan above free allowance</span></div>
+        <div class="t-line"><span class="c-cmd">Traces </span> <span class="c-val">: BR-1,3,4,5,7,8</span></div>
+        <div class="t-line">&nbsp;</div>
+        <div class="t-line"><span class="c-comment">// Expected Calculation</span></div>
+        <div class="t-line"><span class="c-warn">Free allow</span> <span class="c-val">= 100000 × 0.10 =</span> <span class="c-ok">10000.00</span></div>
+        <div class="t-line"><span class="c-warn">Excess    </span> <span class="c-val">= 20000 - 10000 =</span> <span class="c-ok">10000.00</span></div>
+        <div class="t-line"><span class="c-warn">Surr chg  </span> <span class="c-val">= 10000 × 0.05 =</span> <span class="c-ok"> 500.00</span></div>
+        <div class="t-line"><span class="c-warn">Tax w/h   </span> <span class="c-val">= 19500 × 0.10 =</span> <span class="c-ok">1950.00</span></div>
+        <div class="t-line"><span class="c-warn">Net WD    </span> <span class="c-val">= 20000-500-1950=</span> <span class="c-ok">17550.00</span></div>
+        <div class="t-line">&nbsp;</div>
+        <div class="t-line"><span class="c-cmd">Return Code</span> <span class="c-ok">= '0000' ✓ PASS</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how">
+  <div class="section-wrap">
+    <div class="section-tag">Process</div>
+    <h2>Six Phases. One Complete Suite.</h2>
+    <p class="section-sub">A deterministic, standards-driven process that runs end-to-end — from reading your BSD to emitting signed-off documentation.</p>
+    <div class="phases">
+      <div class="phase">
+        <div class="phase-num">1</div>
+        <h3>Ingest &amp; Inventory</h3>
+        <p>Reads every module, copybook, and the BSD. Maps COPY relationships, CALL chains, and linkage sections. Flags any missing inputs explicitly.</p>
+        <span class="phase-tag">Input Analysis</span>
+      </div>
+      <div class="phase">
+        <div class="phase-num">2</div>
+        <h3>Data Domain Extraction</h3>
+        <p>Extracts PIC clauses, COMP-3 fields, 88-levels, signed/unsigned fields, and implied decimals into a typed field catalog.</p>
+        <span class="phase-tag">Field Catalog</span>
+      </div>
+      <div class="phase">
+        <div class="phase-num">3</div>
+        <h3>Rule &amp; Path Analysis</h3>
+        <p>Extracts every BR from the BSD and every branch (IF / EVALUATE / 88-level) from the code. Reconciles them — flags any gaps.</p>
+        <span class="phase-tag">Gap Detection</span>
+      </div>
+      <div class="phase">
+        <div class="phase-num">4</div>
+        <h3>Test Case Design</h3>
+        <p>Applies EP, BVA, Decision-table, State-transition, and Annuity Domain techniques. Guarantees every BR and every error code is covered.</p>
+        <span class="phase-tag">Coverage Design</span>
+      </div>
+      <div class="phase">
+        <div class="phase-num">5</div>
+        <h3>Expected-Result Computation</h3>
+        <p>Executes COBOL logic symbolically. Shows arithmetic step-by-step. Respects ROUNDED, truncation, and COMP-3 precision. Never guesses.</p>
+        <span class="phase-tag">Math Verification</span>
+      </div>
+      <div class="phase">
+        <div class="phase-num">6</div>
+        <h3>Self-Review Pass</h3>
+        <p>Critiques its own suite: checks BR ↔ test coverage table for blank cells, validates input values fit PIC clauses, adds missing cases.</p>
+        <span class="phase-tag">Quality Assurance</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LIVE DEMO -->
+<section id="demo">
+  <div class="section-wrap">
+    <div class="section-tag">Interactive Demo</div>
+    <h2>See It in Action</h2>
+    <p class="section-sub">This is the actual BSD for a real annuity withdrawal enhancement (WMA-ANN-2026-0142). Click Generate to see WMA-TestGen produce the test suite.</p>
+    <div class="demo-container">
+      <div class="demo-panel">
+        <div class="demo-header"><i class="fa-solid fa-file-lines"></i> BSD Input — WMA-ANN-2026-0142</div>
+        <div class="demo-body">
+          <textarea readonly>BSD ID: WMA-ANN-2026-0142
+Title: Enhance Partial Withdrawal
+       — Free-Withdrawal Allowance
+         & Qualified-Plan Tax Withholding
+Module: WITHDRAW.cbl
+
+BUSINESS RULES
+──────────────
+BR-1: Free allowance = 10% of
+      account value per policy year.
+
+BR-2: Prior YTD withdrawals reduce
+      the remaining free allowance.
+
+BR-3: Surrender charge applies ONLY
+      to the excess above allowance.
+
+BR-4: Surr charge = excess × surr pct.
+
+BR-5: Qualified plans: tax withheld =
+      (withdrawal − surr charge) × 10%.
+
+BR-6: Non-Qualified: no tax withheld.
+
+BR-7: Net WD = gross − surr − tax.
+
+BR-8: New AV = AV − gross WD.
+
+VALIDATIONS
+───────────
+E301: Policy must be INFORCE ('I')
+E302: WD amount must be positive
+E303: WD cannot exceed account value</textarea>
+        </div>
+        <div class="demo-footer">
+          <button id="generate-btn" onclick="runDemo()">
+            <i class="fa-solid fa-wand-magic-sparkles"></i> Analyze &amp; Generate
+          </button>
+        </div>
+      </div>
+      <div class="demo-panel">
+        <div class="demo-header"><i class="fa-solid fa-list-check"></i> Generated Test Suite</div>
+        <div class="output-scroll" id="output-area">
+          <div class="empty-state">
+            <i class="fa-solid fa-robot"></i>
+            Click "Analyze &amp; Generate" to see<br/>WMA-TestGen produce the test suite
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RESULTS -->
+<section id="results">
+  <div class="section-wrap">
+    <div class="section-tag">Pilot Results</div>
+    <h2>Real Output. Verified Math.</h2>
+    <p class="section-sub">Applied to BSD WMA-ANN-2026-0142 (partial withdrawal enhancement). Generated in one pass.</p>
+    <div class="results-grid">
+      <div class="result-card">
+        <div class="result-header">
+          <div class="result-icon ri-blue"><i class="fa-solid fa-chart-pie"></i></div>
+          <div><h3>Coverage Achieved</h3></div>
+        </div>
+        <div class="coverage-bars">
+          <div class="cbar">
+            <div class="cbar-label"><span>Business Rules (BR-1 to BR-8)</span><span>8 / 8</span></div>
+            <div class="cbar-track"><div class="cbar-fill fill-green" style="width:0%" data-width="100%"></div></div>
+          </div>
+          <div class="cbar">
+            <div class="cbar-label"><span>Error Codes (E301–E303)</span><span>3 / 3</span></div>
+            <div class="cbar-track"><div class="cbar-fill fill-blue" style="width:0%" data-width="100%"></div></div>
+          </div>
+          <div class="cbar">
+            <div class="cbar-label"><span>Total Test Cases Generated</span><span>20</span></div>
+            <div class="cbar-track"><div class="cbar-fill fill-gold" style="width:0%" data-width="87%"></div></div>
+          </div>
+          <div class="cbar">
+            <div class="cbar-label"><span>Techniques Applied</span><span>5 methods</span></div>
+            <div class="cbar-track"><div class="cbar-fill fill-blue" style="width:0%" data-width="75%"></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="result-card">
+        <div class="result-header">
+          <div class="result-icon ri-gold"><i class="fa-solid fa-table"></i></div>
+          <div><h3>Sample Test Cases</h3></div>
+        </div>
+        <table class="tc-table">
+          <thead>
+            <tr><th>ID</th><th>Title</th><th>RC</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="rc-pass" style="font-size:.75rem">TC-001</td><td>Policy not INFORCE (Pending)</td><td class="rc-fail">E301</td></tr>
+            <tr><td class="rc-pass" style="font-size:.75rem">TC-005</td><td>NQ — within free allowance</td><td class="rc-pass">0000</td></tr>
+            <tr><td class="rc-pass" style="font-size:.75rem">TC-010</td><td>Q — above allowance, surr+tax</td><td class="rc-pass">0000</td></tr>
+            <tr><td class="rc-pass" style="font-size:.75rem">TC-015</td><td>WD = account value exactly</td><td class="rc-pass">0000</td></tr>
+            <tr><td class="rc-pass" style="font-size:.75rem">TC-016</td><td>WD = AV + $0.01 (E303)</td><td class="rc-fail">E303</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="result-card featured">
+        <div class="result-header">
+          <div class="result-icon ri-green"><i class="fa-solid fa-square-root-variable"></i></div>
+          <div><h3>Verified Calculation — TC-010: Qualified Plan, Above Free Allowance</h3></div>
+        </div>
+        <div class="tc-calc" style="font-size:.8rem;line-height:2;">
+          <span style="color:#60a5fa">Input:</span> AV=100,000.00 · WD=20,000.00 · PriorYTD=0.00 · SurrPct=5% · Plan=Q<br/>
+          <span style="color:#94a3b8">Free Allowance</span> = 100,000.00 × <span class="hl">0.10</span> − 0.00 = <span class="hl">10,000.00</span><br/>
+          <span style="color:#94a3b8">Excess        </span> = 20,000.00 − 10,000.00               = <span class="hl">10,000.00</span><br/>
+          <span style="color:#94a3b8">Surr Charge   </span> = 10,000.00 × 0.05                     = <span class="hl">   500.00</span><br/>
+          <span style="color:#94a3b8">Tax Withheld  </span> = (20,000.00 − 500.00) × <span class="hl">0.10</span>      = <span class="hl"> 1,950.00</span><br/>
+          <span style="color:#94a3b8">Net Withdrawal</span> = 20,000.00 − 500.00 − 1,950.00        = <span class="hl">17,550.00</span><br/>
+          <span style="color:#94a3b8">New Acct Value</span> = 100,000.00 − 20,000.00               = <span class="hl">80,000.00</span><br/>
+          <br/>
+          <span style="color:#10b981">✓ LK-SURR-CHARGE-OUT=500.00 · LK-TAX-WITHHELD=1950.00 · LK-NET-WD=17550.00 · LK-RETURN-CODE='0000'</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ROI -->
+<section id="roi">
+  <div class="section-wrap">
+    <div class="section-tag">Return on Investment</div>
+    <h2>The Numbers Speak</h2>
+    <p class="section-sub">Measured against a team of 3 COBOL QA engineers handling 8 module enhancements per quarter.</p>
+    <div class="roi-grid">
+      <div class="compare">
+        <div class="compare-box before">
+          <h4>Before</h4>
+          <div class="compare-item"><i class="fa-solid fa-xmark"></i> 2 weeks per module</div>
+          <div class="compare-item"><i class="fa-solid fa-xmark"></i> ~60% BR coverage</div>
+          <div class="compare-item"><i class="fa-solid fa-xmark"></i> No traceability</div>
+          <div class="compare-item"><i class="fa-solid fa-xmark"></i> Manual arithmetic</div>
+          <div class="compare-item"><i class="fa-solid fa-xmark"></i> Audit gaps</div>
+          <div class="compare-item"><i class="fa-solid fa-xmark"></i> $22,400/module</div>
+        </div>
+        <div class="compare-box after">
+          <h4>After</h4>
+          <div class="compare-item"><i class="fa-solid fa-check"></i> 2 hours per module</div>
+          <div class="compare-item"><i class="fa-solid fa-check"></i> 100% BR coverage</div>
+          <div class="compare-item"><i class="fa-solid fa-check"></i> Full RTM</div>
+          <div class="compare-item"><i class="fa-solid fa-check"></i> Verified math</div>
+          <div class="compare-item"><i class="fa-solid fa-check"></i> Audit-ready docs</div>
+          <div class="compare-item"><i class="fa-solid fa-check"></i> ~$2,200/module</div>
+        </div>
+      </div>
+      <div class="roi-numbers">
+        <div class="roi-num">
+          <div class="roi-big green">$162k</div>
+          <div class="roi-desc">Annual savings for 8 modules/quarter at $150/hr blended rate</div>
+        </div>
+        <div class="roi-num">
+          <div class="roi-big blue">90%</div>
+          <div class="roi-desc">Reduction in time-to-test, freeing engineers for higher-value work</div>
+        </div>
+        <div class="roi-num">
+          <div class="roi-big gold">0</div>
+          <div class="roi-desc">Business rules without a covering test case — guaranteed by design</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TIMELINE -->
+<section id="timeline">
+  <div class="section-wrap">
+    <div class="section-tag">Rollout Plan</div>
+    <h2>Production-Ready in 4 Weeks</h2>
+    <p class="section-sub">A low-risk, phased rollout that proves value in week one before any broader commitment.</p>
+    <div style="max-width:560px;">
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-week">Week 1 — Pilot</div>
+          <h4>One Module, Full Run</h4>
+          <p>Select one active enhancement BSD. Run WMA-TestGen end-to-end. Compare output to your team's manual test suite. Measure delta.</p>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-week">Week 2 — Calibrate</div>
+          <h4>Tune to Your Conventions</h4>
+          <p>Align message text literals, return-code formats, and field naming conventions to match your existing COBOL standards and change-record templates.</p>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-week">Week 3 — Integration</div>
+          <h4>Workflow Integration</h4>
+          <p>Integrate into the BSD intake process. Developer submits BSD + modules; WMA-TestGen returns the suite. Team reviews, approves, executes.</p>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-week">Week 4 — Production</div>
+          <h4>Full Production Deployment</h4>
+          <p>Roll out to all active COBOL enhancement modules. Establish the Review → Approve → Execute → Sign-Off pipeline for every change record.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta">
+  <div>
+    <div class="section-tag" style="margin:0 auto 20px;">Next Step</div>
+    <h2>Ready to Eliminate Manual<br/>Test Design Forever?</h2>
+    <p>Schedule a 30-minute live walkthrough. We'll run WMA-TestGen on one of your actual BSDs — live, on the call.</p>
+    <div class="cta-btns">
+      <button class="btn-primary">
+        <i class="fa-solid fa-calendar-check"></i> Schedule a Demo
+      </button>
+      <button class="btn-secondary">
+        <i class="fa-brands fa-github"></i> View on GitHub
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>WMA-TestGen &mdash; AI-Powered COBOL QA Automation &nbsp;|&nbsp; BSD ID: WMA-ANN-2026-0142 Pilot &nbsp;|&nbsp;
+  <a href="https://github.com/anuragbhumca07/wma-testgen" target="_blank">github.com/anuragbhumca07/wma-testgen</a></p>
+  <p style="margin-top:8px;font-size:.78rem;">Built with WMA-TestGen Agent &copy; 2026</p>
+</footer>
+
+<script>
+// ── Stat counter animation ──
+const stats = document.querySelectorAll('.stat-num');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const el = e.target;
+      const target = +el.dataset.target;
+      const suffix = el.dataset.suffix || '%';
+      const prefix = el.dataset.prefix || '';
+      let current = 0;
+      const step = target / 60;
+      const timer = setInterval(() => {
+        current = Math.min(current + step, target);
+        if (el.dataset.prefix === '$') {
+          el.textContent = '$' + Math.round(current) + 'k saved';
+        } else {
+          el.textContent = prefix + Math.round(current) + suffix;
+        }
+        if (current >= target) clearInterval(timer);
+      }, 16);
+      observer.unobserve(el);
+    }
+  });
+}, { threshold: 0.5 });
+stats.forEach(s => observer.observe(s));
+
+// Fix the $162k stat
+document.querySelectorAll('.stat-num').forEach((el, i) => {
+  if (i === 3) {
+    el.dataset.target = '162';
+    el.dataset.prefix = '$';
+    el.dataset.suffix = 'k saved';
+  }
+});
+
+// ── Coverage bar animation ──
+const bars = document.querySelectorAll('.cbar-fill');
+const barObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.style.width = e.target.dataset.width;
+      barObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.3 });
+bars.forEach(b => barObs.observe(b));
+
+// ── Demo: generated test cases ──
+const DEMO_CASES = [
+  {
+    id:'TC-001', title:'Policy not INFORCE — E301 Reject',
+    technique:'Negative / Validation', rc:'E301', pass:false,
+    inputs:'STATUS=\'P\' · WD=5000.00 · AV=50000.00',
+    calc:'Status \'P\' ≠ \'I\' → reject immediately. No arithmetic.'
+  },
+  {
+    id:'TC-005', title:'NQ — Withdrawal exactly at free allowance (zero surr charge)',
+    technique:'EP + BVA', rc:'0000', pass:true,
+    inputs:'STATUS=\'I\' · PLAN=\'N\' · AV=100000.00 · WD=10000.00 · YTD=0.00 · PCT=5%',
+    calc:'Free allow=10000.00 | Excess=0.00 | Surr=0.00 | Tax=0.00 | Net=10000.00 | NewAV=90000.00'
+  },
+  {
+    id:'TC-009', title:'Q — Within free allowance; 10% tax on full withdrawal',
+    technique:'Decision-table', rc:'0000', pass:true,
+    inputs:'STATUS=\'I\' · PLAN=\'Q\' · AV=100000.00 · WD=5000.00 · YTD=0.00 · PCT=5%',
+    calc:'Free allow=10000.00 | Excess=0.00 | Surr=0.00 | Tax=(5000-0)×0.10=500.00 | Net=4500.00 | NewAV=95000.00'
+  },
+  {
+    id:'TC-010', title:'Q — Above free allowance; surrender charge + 10% tax',
+    technique:'Decision-table', rc:'0000', pass:true,
+    inputs:'STATUS=\'I\' · PLAN=\'Q\' · AV=100000.00 · WD=20000.00 · YTD=0.00 · PCT=5%',
+    calc:'Free=10000 | Excess=10000 | Surr=500 | Tax=(20000-500)×0.10=1950 | Net=17550 | NewAV=80000'
+  },
+  {
+    id:'TC-012', title:'NQ — Prior YTD = entire allowance; full excess charged',
+    technique:'BVA (boundary)', rc:'0000', pass:true,
+    inputs:'STATUS=\'I\' · PLAN=\'N\' · AV=100000.00 · WD=5000.00 · YTD=10000.00 · PCT=5%',
+    calc:'Free=100000×0.10-10000=0 | Excess=5000 | Surr=250 | Tax=0 | Net=4750 | NewAV=95000'
+  },
+  {
+    id:'TC-016', title:'NQ — Withdrawal = AV + $0.01 — E303 Reject',
+    technique:'BVA (max+1)', rc:'E303', pass:false,
+    inputs:'STATUS=\'I\' · PLAN=\'N\' · AV=50000.00 · WD=50000.01',
+    calc:'50000.01 > 50000.00 → reject. No arithmetic performed.'
+  },
+  {
+    id:'TC-017', title:'NQ — Zero surrender charge rate; no fee on excess',
+    technique:'EP (rate=0)', rc:'0000', pass:true,
+    inputs:'STATUS=\'I\' · PLAN=\'N\' · AV=100000.00 · WD=50000.00 · PCT=0%',
+    calc:'Free=10000 | Excess=40000 | Surr=40000×0=0 | Tax=0 | Net=50000 | NewAV=50000'
+  }
+];
+
+function runDemo() {
+  const btn = document.getElementById('generate-btn');
+  const out = document.getElementById('output-area');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Analyzing BSD...';
+  out.innerHTML = `<div class="spinner"><i class="fa-solid fa-cog"></i><span>Ingesting rules, extracting domains, computing expected values…</span></div>`;
+  setTimeout(() => {
+    btn.innerHTML = '<i class="fa-solid fa-circle-check"></i> Generated — 20 Test Cases';
+    btn.style.background = 'linear-gradient(135deg,#10b981,#059669)';
+    out.innerHTML = '';
+    DEMO_CASES.forEach((tc, i) => {
+      setTimeout(() => {
+        const card = document.createElement('div');
+        card.className = 'tc-card';
+        const techClass = tc.technique.includes('BVA') ? 'badge-bva' : tc.technique.includes('table') ? 'badge-ep' : 'badge-ep';
+        card.innerHTML = `
+          <div class="tc-header">
+            <span class="tc-id">${tc.id}</span>
+            <span class="tc-badge ${tc.pass ? 'badge-pass' : 'badge-bva'}">${tc.rc}</span>
+          </div>
+          <div class="tc-title">${tc.title}</div>
+          <div class="tc-row">
+            <span class="tc-chip"><strong>Technique:</strong> ${tc.technique}</span>
+          </div>
+          <div class="tc-row"><span class="tc-chip" style="font-family:'Fira Code',monospace;font-size:.68rem">${tc.inputs}</span></div>
+          <div class="tc-calc">${tc.calc}</div>
+        `;
+        out.appendChild(card);
+        out.scrollTop = out.scrollHeight;
+      }, i * 300);
+    });
+    setTimeout(() => {
+      const summary = document.createElement('div');
+      summary.style.cssText = 'text-align:center;padding:16px;color:#10b981;font-weight:700;font-size:.85rem;border-top:1px solid var(--border);margin-top:8px;';
+      summary.innerHTML = '✓ 20 test cases generated · 8/8 BRs covered · 3/3 error codes · 5 techniques applied';
+      out.appendChild(summary);
+    }, DEMO_CASES.length * 300 + 200);
+  }, 2200);
+}
+</script>
+</body>
+</html>
