@@ -2,7 +2,7 @@ const localtunnel = require('localtunnel');
 const fs = require('fs');
 
 (async () => {
-  const opts = { port: 3000, subdomain: 'wma-testgen-demo' };
+  const opts = { port: 3000, subdomain: 'testgen-ai-demo' };
   let tunnel;
   async function connect() {
     try {

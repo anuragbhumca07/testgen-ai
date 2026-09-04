@@ -80,7 +80,7 @@ app.get('/', (req, res) =>
 app.listen(PORT, () => {
   const hasKey = !!process.env.ANTHROPIC_API_KEY;
   console.log(`\n  ╔══════════════════════════════════════════════╗`);
-  console.log(`  ║   WMA-TestGen                                ║`);
+  console.log(`  ║   TestGen AI                                 ║`);
   console.log(`  ║   http://localhost:${PORT}                    ║`);
   console.log(`  ║   Model : claude-sonnet-4-6                  ║`);
   console.log(`  ║   API key: ${hasKey ? '✓ loaded' : '✗ MISSING — add to .env'}            ║`);

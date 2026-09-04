@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: wma-testgen
+    name: testgen-ai
     env: node
     region: oregon
     plan: free

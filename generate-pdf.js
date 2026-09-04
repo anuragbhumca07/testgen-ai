@@ -91,7 +91,7 @@ async function run() {
   await page.evaluate(() => window.scrollTo(0, 0));
   await new Promise(r => setTimeout(r, 500));
 
-  const pdfPath = path.join(__dirname, 'WMA-TestGen-Client-Pitch.pdf');
+  const pdfPath = path.join(__dirname, 'TestGen-AI-Client-Pitch.pdf');
   await page.pdf({
     path: pdfPath,
     format: 'A4',

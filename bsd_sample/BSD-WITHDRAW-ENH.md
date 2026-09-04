@@ -1,6 +1,6 @@
 # Business Systems Design (BSD) — Sample Input
 
-**BSD ID:** WMA-ANN-2026-0142
+**BSD ID:** ANN-2026-0142
 **Title:** Enhance Partial Withdrawal — Add Free-Withdrawal Allowance & Qualified-Plan Tax Withholding
 **Target Module:** WITHDRAW.cbl
 **Dependent Copybooks:** CPYPOLCY, CPYTRANS

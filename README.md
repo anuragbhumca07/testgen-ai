@@ -1,8 +1,8 @@
-# WMA-TestGen
+# TestGen AI
 
 **AI-Powered COBOL Test Case Generation for Annuity Policy Admin Systems**
 
-WMA-TestGen reads a Business Systems Design (BSD) document and COBOL modules, then produces a complete, mathematically verified test suite with full traceability.
+TestGen AI reads a Business Systems Design (BSD) document and COBOL modules, then produces a complete, mathematically verified test suite with full traceability.
 
 ## Quick Start
 
@@ -19,11 +19,11 @@ npm start
 npm run pdf
 ```
 
-Output: `WMA-TestGen-Client-Pitch.pdf` + `screenshots/` folder.
+Output: `TestGen-AI-Client-Pitch.pdf` + `screenshots/` folder.
 
 ## Pilot Case
 
-BSD: **WMA-ANN-2026-0142** — Enhance Partial Withdrawal (Free-Withdrawal Allowance + Qualified-Plan Tax Withholding)
+BSD: **ANN-2026-0142** — Enhance Partial Withdrawal (Free-Withdrawal Allowance + Qualified-Plan Tax Withholding)
 - Module: `WITHDRAW.cbl`
 - Result: 20 test cases · 8/8 BRs · 3/3 error codes · 5 techniques
 
@@ -40,4 +40,4 @@ BSD: **WMA-ANN-2026-0142** — Enhance Partial Withdrawal (Free-Withdrawal Allow
 
 ## GitHub
 
-[github.com/anuragbhumca07/wma-testgen](https://github.com/anuragbhumca07/wma-testgen)
+[github.com/anuragbhumca07/testgen-ai](https://github.com/anuragbhumca07/testgen-ai)

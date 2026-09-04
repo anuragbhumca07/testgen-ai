@@ -1,7 +1,7 @@
 {
-  "name": "wma-testgen",
+  "name": "testgen-ai",
   "version": "1.0.0",
-  "description": "WMA-TestGen: AI-Powered COBOL Test Case Generation for Annuity Policy Admin Systems",
+  "description": "TestGen AI: AI-Powered COBOL Test Case Generation for Annuity Policy Admin Systems",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
