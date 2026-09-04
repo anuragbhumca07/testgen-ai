@@ -1,4 +1,4 @@
 node_modules/
-screenshots/
-*.pdf
 .env
+server.log
+server.err
